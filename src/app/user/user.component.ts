@@ -8,7 +8,7 @@ import { UserService } from './user.service';
   providers: [UserService]
 })
 export class UserComponent implements OnInit {
-  user = 'revanth';
+  user = '';
   isLoggedIn = false;
   constructor(private userService: UserService) { }
 

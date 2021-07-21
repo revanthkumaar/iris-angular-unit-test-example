@@ -16,9 +16,10 @@ describe('testing user component', () => {
 
   it('should update the user value from a service', () => {
     let fixture = TestBed.createComponent(UserComponent); //arrange
-    let app = fixture.debugElement.componentInstance; //action
-    let userService = fixture.debugElement.injector.get(UserService);
-    
+    let app = fixture.debugElement.componentInstance; 
+    let userService = fixture.debugElement.injector.get(UserService);//forcefully injecting the service inside the component 
+    fixture.detectChanges();
+    expect(userService.user).toEqual(app.user);
 
   });
 });
