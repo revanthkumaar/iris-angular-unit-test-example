@@ -12,7 +12,7 @@ import { UserService } from './user.service';
 export class UserComponent implements OnInit {
   user = '';
   isLoggedIn = false;
-  data = '';
+  data = ''
   constructor(private userService: UserService, private dataService:DataService) { }
 
   ngOnInit(): void {

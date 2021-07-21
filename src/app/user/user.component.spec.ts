@@ -40,6 +40,23 @@ describe('testing user component', () => {
       Promise.resolve('Data')
     );
     fixture.detectChanges();
-    expect(app.data).toBe(undefined);
+    expect(app.data).toBe('Data');
   });
+
+
+  it('should  fetch for the data if called in async manner', async (() => {
+    //async test zone
+    let fixture = TestBed.createComponent(UserComponent); //arrange
+    let app = fixture.debugElement.componentInstance;
+    let dataService = fixture.debugElement.injector.get(DataService);
+    let spy = spyOn(dataService, 'getDetails').and.returnValue(
+      Promise.resolve('Data')
+    );
+    fixture.whenStable().then( () => {
+        fixture.detectChanges();
+        expect(app.data).toBe('Data');
+    })
+  }));
+
+
 });
