@@ -1,4 +1,4 @@
-import { TestBed, async } from '@angular/core/testing';
+import { TestBed, async, fakeAsync } from '@angular/core/testing';
 import { DataService } from './data.service';
 import { UserComponent } from './user.component';
 import { UserService } from './user.service';
@@ -32,7 +32,9 @@ describe('testing user component', () => {
     expect(elements.querySelector('p').textContent).toEqual(app.user);
   });
 
+
   it('should not fetch for the data if called in sync manner', () => {
+    //sync test zone
     let fixture = TestBed.createComponent(UserComponent); //arrange
     let app = fixture.debugElement.componentInstance;
     let dataService = fixture.debugElement.injector.get(DataService);
@@ -40,7 +42,7 @@ describe('testing user component', () => {
       Promise.resolve('Data')
     );
     fixture.detectChanges();
-    expect(app.data).toBe('Data');
+    expect(app.data).toBe(undefined);
   });
 
 
@@ -52,11 +54,27 @@ describe('testing user component', () => {
     let spy = spyOn(dataService, 'getDetails').and.returnValue(
       Promise.resolve('Data')
     );
+
     fixture.whenStable().then( () => {
         fixture.detectChanges();
         expect(app.data).toBe('Data');
     })
   }));
 
+  //using fakeAsync and tick:
 
+    it('should  fetch for the data if called in async manner', fakeAsync(() => {
+      //async test zone
+      let fixture = TestBed.createComponent(UserComponent); //arrange
+      let app = fixture.debugElement.componentInstance;
+      let dataService = fixture.debugElement.injector.get(DataService);
+      let spy = spyOn(dataService, 'getDetails').and.returnValue(
+        Promise.resolve('Data')
+      );
+
+        tick:
+        fixture.detectChanges();
+        expect(app.data).toBe('Data');
+    
+    }));
 });
