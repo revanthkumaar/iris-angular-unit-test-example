@@ -1,4 +1,5 @@
-import { TestBed } from '@angular/core/testing';
+import { TestBed, async } from '@angular/core/testing';
+import { DataService } from './data.service';
 import { UserComponent } from './user.component';
 import { UserService } from './user.service';
 describe('testing user component', () => {
@@ -16,10 +17,29 @@ describe('testing user component', () => {
 
   it('should update the user value from a service', () => {
     let fixture = TestBed.createComponent(UserComponent); //arrange
-    let app = fixture.debugElement.componentInstance; 
-    let userService = fixture.debugElement.injector.get(UserService);//forcefully injecting the service inside the component 
+    let app = fixture.debugElement.componentInstance;
+    let userService = fixture.debugElement.injector.get(UserService); //forcefully injecting the service inside the component
     fixture.detectChanges();
     expect(userService.user).toEqual(app.user);
+  });
 
+  it('should update the user value from a service and render it on HTML page', () => {
+    let fixture = TestBed.createComponent(UserComponent); //arrange
+    let app = fixture.debugElement.componentInstance;
+    let userService = fixture.debugElement.injector.get(UserService); //forcefully injecting the service inside the component
+    fixture.detectChanges();
+    let elements = fixture.debugElement.nativeElement;
+    expect(elements.querySelector('p').textContent).toEqual(app.user);
+  });
+
+  it('should not fetch for the data if called in sync manner', () => {
+    let fixture = TestBed.createComponent(UserComponent); //arrange
+    let app = fixture.debugElement.componentInstance;
+    let dataService = fixture.debugElement.injector.get(DataService);
+    let spy = spyOn(dataService, 'getDetails').and.returnValue(
+      Promise.resolve('Data')
+    );
+    fixture.detectChanges();
+    expect(app.data).toBe(undefined);
   });
 });
